@@ -253,8 +253,8 @@ RUN apt-get update --fix-missing && \
     apt-get install -y --no-install-recommends \   
     snapd &&\
     ln -s /var/lib/snapd/snap /snap 
-RUN systemctl restart snapd   
-RUN snap install core 
+ 
+RUN snap install telegram-desktop 
 
 RUN apt-add-repository ppa:remmina-ppa-team/remmina-next &&\
 	apt-get update && sudo apt-get install remmina remmina-plugin-rdp libfreerdp-plugins-standard
