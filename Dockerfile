@@ -253,7 +253,7 @@ RUN apt-get update --fix-missing && \
     apt-get install -y --no-install-recommends \   
     snapd &&\
     ln -s /var/lib/snapd/snap /snap 
-RUN systemctl enable --now snapd.socket && systemctl restart snapd   
+RUN systemctl restart snapd   
 RUN snap install core 
 
 RUN apt-add-repository ppa:remmina-ppa-team/remmina-next &&\
