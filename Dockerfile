@@ -30,80 +30,80 @@ RUN apt-get update \
         lxde gtk2-engines-murrine gnome-themes-standard arc-theme
 
 
-RUN apt-get update && apt-get install -y python3 python3-tk gcc make cmake
+# RUN apt-get update && apt-get install -y python3 python3-tk gcc make cmake
 
-# tini to fix subreap
-ARG TINI_VERSION=v0.19.0
-RUN wget https://github.com/krallin/tini/archive/v0.19.0.tar.gz \
- && tar zxf v0.19.0.tar.gz \
- && export CFLAGS="-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37"; \
-    cd tini-0.19.0; cmake . && make && make install \
- && cd ..; rm -r tini-0.19.0 v0.19.0.tar.gz
-
-
-# NextCloud
-RUN apt-get update && apt-get install -y nextcloud-desktop
-
-# Firefox with apt, not snap (which does not run in the container)
-COPY mozilla-firefox_aptprefs.txt /etc/apt/preferences.d/mozilla-firefox
-RUN add-apt-repository -y ppa:mozillateam/ppa
-RUN apt-get update && apt-get install -y --allow-downgrades firefox fonts-lyx
-
-# Chromium beta with apt, not snap (which does not run in the container)
-COPY chromium_aptprefs.txt /etc/apt/preferences.d/chromium
-RUN sudo add-apt-repository -y ppa:saiarcot895/chromium-beta
-RUN  apt-get update && apt-get install -y --allow-downgrades chromium-browser
-RUN sed -i 's/Exec=chromium-browser %U/Exec=chromium-browser %U --no-sandbox/g' /usr/share/applications/chromium-browser.desktop
+# # tini to fix subreap
+# ARG TINI_VERSION=v0.19.0
+# RUN wget https://github.com/krallin/tini/archive/v0.19.0.tar.gz \
+#  && tar zxf v0.19.0.tar.gz \
+#  && export CFLAGS="-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37"; \
+#     cd tini-0.19.0; cmake . && make && make install \
+#  && cd ..; rm -r tini-0.19.0 v0.19.0.tar.gz
 
 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        # This is necessary for apt to access HTTPS sources:
-        apt-transport-https \
-        gnupg-agent \
-        gpg-agent \
-        gnupg2 \
-        ca-certificates \
-        build-essential \
-        pkg-config \
-        software-properties-common \
-        lsof \
-        net-tools \
-        libcurl4 \
-        curl \
-        wget \
-        cron \
-        openssl \
-        iproute2 \
-        psmisc \
-        tmux \
-        dpkg-sig \
-        uuid-dev \
-        csh \
-        xclip \
-        clinfo \
-        time \
-        libssl-dev \
-        libgdbm-dev \
-        libncurses5-dev \
-        libncursesw5-dev \
-        # required by pyenv
-        libreadline-dev \
-        libedit-dev \
-        xz-utils \
-        gawk \
-        # Simplified Wrapper and Interface Generator (5.8MB) - required by lots of py-libs
-        swig \
-        # Graphviz (graph visualization software) (4MB)
-        graphviz libgraphviz-dev \
-        # Terminal multiplexer
-        screen \
-        # Editor
-        nano \
-        openvpn 
+# # NextCloud
+# RUN apt-get update && apt-get install -y nextcloud-desktop
+
+# # Firefox with apt, not snap (which does not run in the container)
+# COPY mozilla-firefox_aptprefs.txt /etc/apt/preferences.d/mozilla-firefox
+# RUN add-apt-repository -y ppa:mozillateam/ppa
+# RUN apt-get update && apt-get install -y --allow-downgrades firefox fonts-lyx
+
+# # Chromium beta with apt, not snap (which does not run in the container)
+# COPY chromium_aptprefs.txt /etc/apt/preferences.d/chromium
+# RUN sudo add-apt-repository -y ppa:saiarcot895/chromium-beta
+# RUN  apt-get update && apt-get install -y --allow-downgrades chromium-browser
+# RUN sed -i 's/Exec=chromium-browser %U/Exec=chromium-browser %U --no-sandbox/g' /usr/share/applications/chromium-browser.desktop
+
+
+# RUN apt-get update --fix-missing && \
+#     apt-get install -y apt-utils && \
+#     apt-get upgrade -y && \
+#     apt-get update && \
+#     apt-get install -y --no-install-recommends \
+#         # This is necessary for apt to access HTTPS sources:
+#         apt-transport-https \
+#         gnupg-agent \
+#         gpg-agent \
+#         gnupg2 \
+#         ca-certificates \
+#         build-essential \
+#         pkg-config \
+#         software-properties-common \
+#         lsof \
+#         net-tools \
+#         libcurl4 \
+#         curl \
+#         wget \
+#         cron \
+#         openssl \
+#         iproute2 \
+#         psmisc \
+#         tmux \
+#         dpkg-sig \
+#         uuid-dev \
+#         csh \
+#         xclip \
+#         clinfo \
+#         time \
+#         libssl-dev \
+#         libgdbm-dev \
+#         libncurses5-dev \
+#         libncursesw5-dev \
+#         # required by pyenv
+#         libreadline-dev \
+#         libedit-dev \
+#         xz-utils \
+#         gawk \
+#         # Simplified Wrapper and Interface Generator (5.8MB) - required by lots of py-libs
+#         swig \
+#         # Graphviz (graph visualization software) (4MB)
+#         graphviz libgraphviz-dev \
+#         # Terminal multiplexer
+#         screen \
+#         # Editor
+#         nano \
+#         openvpn 
 #        
 RUN apt-get update --fix-missing && \
     apt-get install -y apt-utils && \
@@ -115,7 +115,13 @@ RUN apt-get update --fix-missing && \
         # Dev Tools
         sqlite3 \
         # XML Utils
-        xmlstarlet \
+        xmlstarlet 
+	
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
         # GNU parallel
         parallel \
         #  R*-tree implementation - Required for earthpy, geoviews (3MB)
@@ -133,8 +139,14 @@ RUN apt-get update --fix-missing && \
         # image processing library (6MB), required for tesseract
         libleptonica-dev \
         # GEOS library (3MB)
-        libgeos-dev \
-        # style sheet preprocessor
+        libgeos-dev 
+        
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+    # style sheet preprocessor
         less \
         # Print dir tree
         tree \
@@ -148,9 +160,15 @@ RUN apt-get update --fix-missing && \
         jq \
         rsync \
         # sqlite3 driver - required for pyenv
-        libsqlite3-dev \
+        libsqlite3-dev 
+	
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
         # VCS:
-        #git \
+
         subversion \
         jed \
         # odbc drivers
