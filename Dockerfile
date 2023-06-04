@@ -187,10 +187,17 @@ RUN apt-get update --fix-missing && \
         zlibc \
         # unpack (almost) everything with one command
         unp \
-        git \
+        #git \
         libbz2-dev \
         liblzma-dev \
         zlib1g-dev 
+	
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \   
+    git
 	
 # Killsession app
 COPY killsession/ /tmp/killsession
