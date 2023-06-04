@@ -245,6 +245,16 @@ RUN apt-get update --fix-missing && \
     apt-get update && \
     apt-get install -y --no-install-recommends \   
     git
+    
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \   
+    snapd &&\
+    snap install core 
+RUN apt-add-repository ppa:remmina-ppa-team/remmina-next &&\
+	apt-get update && sudo apt-get install remmina remmina-plugin-rdp libfreerdp-plugins-standard
 	
 # Killsession app
 COPY killsession/ /tmp/killsession
