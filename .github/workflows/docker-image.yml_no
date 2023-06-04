@@ -33,4 +33,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: dikeckaan/ubuntu-novnc-chromium:amd64
+          tags: u8uiujnhi98jhj/ubuntu-novnc-chromium:amd64
+          buildkitd-flags: --debug
