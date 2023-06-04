@@ -10,6 +10,11 @@ LABEL description="Bootstrap image used to build and test Remmina with Ubuntu 22
 
 # Set noninteractive
 ENV DEBIAN_FRONTEND noninteractive
+# # Avoid prompts for time zone
+# ENV DEBIAN_FRONTEND noninteractive
+ENV TZ=Europe/Moscow
+# Fix issue with libGL on Windows
+ENV LIBGL_ALWAYS_INDIRECT=1
 
 RUN \
     LC_ALL=en_US.UTF-8 apt-get update -qq \
@@ -23,11 +28,7 @@ RUN \
     
 # FROM ubuntu:22.04 as system
 
-# # Avoid prompts for time zone
-# ENV DEBIAN_FRONTEND noninteractive
-ENV TZ=Europe/Moscow
-# Fix issue with libGL on Windows
-ENV LIBGL_ALWAYS_INDIRECT=1
+
 
 RUN \
     LC_ALL=en_US.UTF-8 apt-get update -qq \
