@@ -189,26 +189,26 @@ ENV LIBGL_ALWAYS_INDIRECT=1
 #         autoconf \
 #         automake \
 #         libtool 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
-        cmake  \
-        fonts-liberation \
-        google-perftools 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
-        # Compression Libs
-        # also install rar/unrar? but both are propriatory or unar (40MB)
-        zip \
-        gzip \
-        unzip \
-        bzip2 \
-        lzop 
+# RUN apt-get update --fix-missing && \
+#     apt-get install -y apt-utils && \
+#     apt-get upgrade -y && \
+#     apt-get update && \
+#     apt-get install -y --no-install-recommends \  
+#         cmake  \
+#         fonts-liberation \
+#         google-perftools 
+# RUN apt-get update --fix-missing && \
+#     apt-get install -y apt-utils && \
+#     apt-get upgrade -y && \
+#     apt-get update && \
+#     apt-get install -y --no-install-recommends \  
+#         # Compression Libs
+#         # also install rar/unrar? but both are propriatory or unar (40MB)
+#         zip \
+#         gzip \
+#         unzip \
+#         bzip2 \
+#         lzop 
 RUN apt-get update --fix-missing && \
     apt-get install -y apt-utils && \
     apt-get upgrade -y && \
@@ -216,10 +216,19 @@ RUN apt-get update --fix-missing && \
     apt-get install -y --no-install-recommends \  
 	# deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
         libarchive-tools \
-        zlibc \
+        zlibc 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
         # unpack (almost) everything with one command
-        unp \
-        #git \
+        unp
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
         libbz2-dev \
         liblzma-dev \
         zlib1g-dev 
