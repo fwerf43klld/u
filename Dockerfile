@@ -252,7 +252,7 @@ RUN apt-get update --fix-missing && \
     apt-get update && \
     apt-get install -y --no-install-recommends \   
     snapd &&\
-    sudo ln -s /var/lib/snapd/snap /snap 
+    ln -s /var/lib/snapd/snap /snap 
     
 RUN snap install snap-store 
 
