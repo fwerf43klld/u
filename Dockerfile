@@ -215,7 +215,12 @@ RUN apt-get update --fix-missing && \
     apt-get update && \
     apt-get install -y --no-install-recommends \  
 	# deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
-        libarchive-tools \
+        libarchive-tools 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
         zlibc 
 RUN apt-get update --fix-missing && \
     apt-get install -y apt-utils && \
