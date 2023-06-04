@@ -221,7 +221,8 @@ RUN apt-get update --fix-missing && \
     apt-get upgrade -y && \
     apt-get update && \
     apt-get install -y --no-install-recommends \  
-        zlibc 
+        zlib1g \
+	zlib1g-dev 
 RUN apt-get update --fix-missing && \
     apt-get install -y apt-utils && \
     apt-get upgrade -y && \
