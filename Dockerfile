@@ -12,6 +12,15 @@ ENV TZ=Europe/Paris
 # Fix issue with libGL on Windows
 ENV LIBGL_ALWAYS_INDIRECT=1
 
+# Layer cleanup script
+COPY resources/scripts/clean-layer.sh  /usr/bin/clean-layer.sh
+COPY resources/scripts/fix-permissions.sh  /usr/bin/fix-permissions.sh
+
+ # Make clean-layer and fix-permissions executable
+RUN \
+    chmod a+rwx /usr/bin/clean-layer.sh && \
+    chmod a+rwx /usr/bin/fix-permissions.sh
+    
 RUN apt-get update -qq \
     && apt-get install -y -qq software-properties-common python3-software-properties \
     && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
