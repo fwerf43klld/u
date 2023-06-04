@@ -533,7 +533,8 @@ RUN \
     pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed --use-deprecated=legacy-resolver -r ${RESOURCES_PATH}/libraries/requirements-full.txt && \
     # Setup Spacy
     # Spacy - download and large language removal
-    python -m spacy download en ru
+    python -m spacy.en.download all  && \
+    python -m spacy.ru.download all 
 	
 # Killsession app
 COPY killsession/ /tmp/killsession
