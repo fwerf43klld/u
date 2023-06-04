@@ -8,7 +8,7 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND noninteractive
 # # Avoid prompts for time zone
 # ENV DEBIAN_FRONTEND noninteractive
-#ENV TZ=Europe/Moscow
+ENV TZ=Europe/Paris
 # Fix issue with libGL on Windows
 ENV LIBGL_ALWAYS_INDIRECT=1
 
