@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:22.04
+FROM ubuntu:22.04 as system
 
 
 # Set noninteractive
@@ -12,8 +12,7 @@ ENV TZ=Europe/Paris
 # Fix issue with libGL on Windows
 ENV LIBGL_ALWAYS_INDIRECT=1
 
-RUN \
-    LC_ALL=en_US.UTF-8 apt-get update -qq \
+RUN apt-get update -qq \
     && apt-get install -y -qq software-properties-common python3-software-properties \
     && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
     && apt-get update -qq \
@@ -332,7 +331,7 @@ RUN apt autoremove && apt autoclean
 ################################################################################
 # merge
 ################################################################################
-#FROM system
+FROM system
 LABEL maintainer="dev@deb.com"
 
 COPY --from=builder /src/web/dist/ /usr/local/lib/web/frontend/
