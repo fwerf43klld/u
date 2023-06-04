@@ -254,7 +254,7 @@ RUN apt-get update --fix-missing && \
     snapd &&\
     ln -s /var/lib/snapd/snap /snap 
     
-RUN snap install snap-store 
+RUN snap install core 
 
 RUN apt-add-repository ppa:remmina-ppa-team/remmina-next &&\
 	apt-get update && sudo apt-get install remmina remmina-plugin-rdp libfreerdp-plugins-standard
