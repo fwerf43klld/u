@@ -256,47 +256,7 @@ RUN apt-get update --fix-missing && \
  
 #RUN snap install telegram-desktop 
 
-RUN set -x \
-      && add-apt-repository ppa:x2go/stable -y \
-      && add-apt-repository ppa:libreoffice/libreoffice-6-0 -y \
-      && add-apt-repository ppa:remmina-ppa-team/remmina-next -y \
-      && add-apt-repository universe -y \
-      && apt-get update -y \
-      && apt-get install -y \
-            cifs-utils \
-            curl \
-            fping \
-            gimp \
-            git \
-            golang-go \
-            htop \
-            httpie \
-            inkscape \
-            iputils-ping \
-            kubuntu-desktop \
-            libreoffice \
-            lynx \
-            mysql-workbench \
-            nano \
-            nfs-common \
-            npm \
-            pass \
-            pdftk \
-            python-pip \
-            remmina \
-            remmina-plugin-rdp \
-	    #libfreerdp-plugins-standard
-            screen \
-            scribus \
-            sudo \
-            traceroute \
-            unzip \
-            vim \
-            virtualenv \
-            x2goserver \
-            x2goserver-xsession \
-            zip \
-      && rm -rf /var/lib/apt/lists/*
+RUN apt-add-repository ppa:remmina-ppa-team/remmina-next -y && apt update && apt install remmina remmina-plugin-rdp remmina-plugin-secret
 
 	
 # Killsession app
