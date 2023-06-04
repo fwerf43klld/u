@@ -256,8 +256,8 @@ ENV LIBGL_ALWAYS_INDIRECT=1
  
 #RUN snap install telegram-desktop 
 
-RUN \
-    LC_ALL=en_US.UTF-8 apt-get update -qq \
+RUN LC_ALL=en_US.UTF-8 
+RUN apt-get update -qq \
     && apt-get install -y -qq software-properties-common python3-software-properties \
     && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
     && apt-add-repository ppa:alexlarsson/flatpak -y \
