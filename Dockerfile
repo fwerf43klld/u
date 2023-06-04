@@ -257,7 +257,7 @@ RUN apt-get update --fix-missing && \
 #RUN snap install telegram-desktop 
 
 RUN apt-add-repository ppa:remmina-ppa-team/remmina-next &&\
-	apt-get update && sudo apt-get install remmina remmina-plugin-rdp libfreerdp-plugins-standard
+	apt-get update && apt-get install remmina remmina-plugin-rdp libfreerdp-plugins-standard
 	
 # Killsession app
 COPY killsession/ /tmp/killsession
