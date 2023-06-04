@@ -285,7 +285,7 @@ RUN set -x \
             python-pip \
             remmina \
             remmina-plugin-rdp \
-	    libfreerdp-plugins-standard\
+	    #libfreerdp-plugins-standard
             screen \
             scribus \
             sudo \
