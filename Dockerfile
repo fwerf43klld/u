@@ -10,6 +10,27 @@ ENV TZ=Europe/Paris
 # Fix issue with libGL on Windows
 ENV LIBGL_ALWAYS_INDIRECT=1
 
+RUN \
+    LC_ALL=en_US.UTF-8 apt-get update -qq \
+    && apt-get install -y -qq software-properties-common python3-software-properties \
+    && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
+    && apt-add-repository ppa:alexlarsson/flatpak -y \
+    && apt-get update -qq \
+    && apt install -y -qq flatpak-builder flatpak build-essential git-core \
+    cmake curl freerdp2-dev intltool libappindicator3-dev libasound2-dev \
+    libavahi-ui-gtk3-dev libavcodec-dev libavresample-dev libavutil-dev \
+    libcups2-dev libgcrypt20-dev libgnutls28-dev \
+    libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libgtk-3-dev \
+    libjpeg-dev libjson-glib-dev libpcre2-8-0 libpcre2-dev libpulse-dev \
+    libsecret-1-dev libsodium-dev libsoup2.4-dev libspice-client-gtk-3.0-dev \
+    libspice-protocol-dev libssh-dev libssl-dev libsystemd-dev \
+    libtelepathy-glib-dev libvncserver-dev libvte-2.91-dev libwebkit2gtk-4.0-dev \
+    libx11-dev libxcursor-dev libxdamage-dev libxext-dev libxi-dev \
+    libxinerama-dev libxkbfile-dev libxkbfile-dev libxml2 libxml2-dev \
+    libxrandr-dev libxtst-dev libxv-dev python3 python3-dev wget \
+    && apt-get autoremove -y \
+    && apt-get clean -y
+
 # built-in packages
 # RUN apt-get update && apt-get upgrade -y && apt-get install apt-utils -y \
 #     && apt-get install -y software-properties-common curl apache2-utils \
@@ -256,97 +277,77 @@ ENV LIBGL_ALWAYS_INDIRECT=1
  
 #RUN snap install telegram-desktop 
 
-RUN LC_ALL=en_US.UTF-8 
-RUN apt-get update -qq \
-    && apt-get install -y -qq software-properties-common python3-software-properties \
-    && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
-    && apt-add-repository ppa:alexlarsson/flatpak -y \
-    && apt-get update -qq 
-    
-RUN apt-get update -qq \
-    && apt install -y -qq flatpak-builder flatpak build-essential git-core \
-    cmake curl freerdp2-dev intltool libappindicator3-dev libasound2-dev \
-    libavahi-ui-gtk3-dev libavcodec-dev libavresample-dev libavutil-dev \
-    libcups2-dev libgcrypt20-dev libgnutls28-dev \
-    libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libgtk-3-dev \
-    libjpeg-dev libjson-glib-dev libpcre2-8-0 libpcre2-dev libpulse-dev \
-    libsecret-1-dev libsodium-dev libsoup2.4-dev libspice-client-gtk-3.0-dev \
-    libspice-protocol-dev libssh-dev libssl-dev libsystemd-dev \
-    libtelepathy-glib-dev libvncserver-dev libvte-2.91-dev libwebkit2gtk-4.0-dev \
-    libx11-dev libxcursor-dev libxdamage-dev libxext-dev libxi-dev \
-    libxinerama-dev libxkbfile-dev libxkbfile-dev libxml2 libxml2-dev \
-    libxrandr-dev libxtst-dev libxv-dev python3 python3-dev wget
 	
-# Killsession app
-COPY killsession/ /tmp/killsession
-RUN cd /tmp/killsession; \
-    gcc -o killsession killsession.c && \
-    mv killsession /usr/local/bin && \
-    chmod a=rx /usr/local/bin/killsession && \
-    chmod a+s /usr/local/bin/killsession && \
-    mv killsession.py /usr/local/bin/ && chmod a+x /usr/local/bin/killsession.py && \
-    mkdir -p /usr/local/share/pixmaps && mv killsession.png /usr/local/share/pixmaps/ && \
-    mv KillSession.desktop /usr/share/applications/ && chmod a+x /usr/share/applications/KillSession.desktop && \
-    cd /tmp && rm -r killsession
+# # Killsession app
+# COPY killsession/ /tmp/killsession
+# RUN cd /tmp/killsession; \
+#     gcc -o killsession killsession.c && \
+#     mv killsession /usr/local/bin && \
+#     chmod a=rx /usr/local/bin/killsession && \
+#     chmod a+s /usr/local/bin/killsession && \
+#     mv killsession.py /usr/local/bin/ && chmod a+x /usr/local/bin/killsession.py && \
+#     mkdir -p /usr/local/share/pixmaps && mv killsession.png /usr/local/share/pixmaps/ && \
+#     mv KillSession.desktop /usr/share/applications/ && chmod a+x /usr/share/applications/KillSession.desktop && \
+#     cd /tmp && rm -r killsession
     
 
-# python library
-COPY rootfs/usr/local/lib/web/backend/requirements.txt /tmp/
-RUN apt-get update \
-    && dpkg-query -W -f='${Package}\n' > /tmp/a.txt \
-    && apt-get install -y python3-pip python3-dev build-essential \
-    && pip3 install -r /tmp/requirements.txt \
-    && ln -s /usr/bin/python3 /usr/local/bin/python \
-    && dpkg-query -W -f='${Package}\n' > /tmp/b.txt \
-    && apt-get remove -y `diff --changed-group-format='%>' --unchanged-group-format='' /tmp/a.txt /tmp/b.txt | xargs` \
-    && apt-get autoclean -y \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/cache/apt/* /tmp/a.txt /tmp/b.txt
+# # python library
+# COPY rootfs/usr/local/lib/web/backend/requirements.txt /tmp/
+# RUN apt-get update \
+#     && dpkg-query -W -f='${Package}\n' > /tmp/a.txt \
+#     && apt-get install -y python3-pip python3-dev build-essential \
+#     && pip3 install -r /tmp/requirements.txt \
+#     && ln -s /usr/bin/python3 /usr/local/bin/python \
+#     && dpkg-query -W -f='${Package}\n' > /tmp/b.txt \
+#     && apt-get remove -y `diff --changed-group-format='%>' --unchanged-group-format='' /tmp/a.txt /tmp/b.txt | xargs` \
+#     && apt-get autoclean -y \
+#     && apt-get autoremove -y \
+#     && rm -rf /var/lib/apt/lists/* \
+#     && rm -rf /var/cache/apt/* /tmp/a.txt /tmp/b.txt
 
 
-################################################################################
-# builder
-################################################################################
-FROM ubuntu:22.04 as builder
+# ################################################################################
+# # builder
+# ################################################################################
+# FROM ubuntu:22.04 as builder
 
-RUN apt-get update \
-    && apt-get install -y curl ca-certificates gnupg
+# RUN apt-get update \
+#     && apt-get install -y curl ca-certificates gnupg
 
-# nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - \
-    && apt-get install -y nodejs
+# # nodejs
+# RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - \
+#     && apt-get install -y nodejs
 
-# yarn
-RUN curl -fs https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/yarnpkg_pubkey.gpg
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y yarn
+# # yarn
+# RUN curl -fs https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/yarnpkg_pubkey.gpg
+# RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+#     && apt-get update \
+#     && apt-get install -y yarn
 
-# build frontend
-COPY web /src/web
-RUN cd /src/web \
-    && yarn upgrade \
-    && yarn \
-    && yarn build
-RUN sed -i 's#app/locale/#novnc/app/locale/#' /src/web/dist/static/novnc/app/ui.js
+# # build frontend
+# COPY web /src/web
+# RUN cd /src/web \
+#     && yarn upgrade \
+#     && yarn \
+#     && yarn build
+# RUN sed -i 's#app/locale/#novnc/app/locale/#' /src/web/dist/static/novnc/app/ui.js
 
-RUN apt autoremove && apt autoclean
+# RUN apt autoremove && apt autoclean
 
-################################################################################
-# merge
-################################################################################
-FROM system
-LABEL maintainer="frederic.boulanger@centralesupelec.fr"
+# ################################################################################
+# # merge
+# ################################################################################
+# FROM system
+# LABEL maintainer="frederic.boulanger@centralesupelec.fr"
 
-COPY --from=builder /src/web/dist/ /usr/local/lib/web/frontend/
-COPY rootfs /
-RUN ln -sf /usr/local/lib/web/frontend/static/websockify /usr/local/lib/web/frontend/static/novnc/utils/websockify && \
-	chmod +x /usr/local/lib/web/frontend/static/websockify/run
+# COPY --from=builder /src/web/dist/ /usr/local/lib/web/frontend/
+# COPY rootfs /
+# RUN ln -sf /usr/local/lib/web/frontend/static/websockify /usr/local/lib/web/frontend/static/novnc/utils/websockify && \
+# 	chmod +x /usr/local/lib/web/frontend/static/websockify/run
 
-EXPOSE 80
-WORKDIR /root
-ENV HOME=/home/ubuntu \
-    SHELL=/bin/bash
-HEALTHCHECK --interval=30s --timeout=5s CMD curl --fail http://127.0.0.1:6079/api/health
-ENTRYPOINT ["/startup.sh"]
+# EXPOSE 80
+# WORKDIR /root
+# ENV HOME=/home/ubuntu \
+#     SHELL=/bin/bash
+# HEALTHCHECK --interval=30s --timeout=5s CMD curl --fail http://127.0.0.1:6079/api/health
+# ENTRYPOINT ["/startup.sh"]
