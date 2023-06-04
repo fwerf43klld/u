@@ -162,33 +162,33 @@ ENV LIBGL_ALWAYS_INDIRECT=1
 #         # sqlite3 driver - required for pyenv
 #         libsqlite3-dev 
 	
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
-        # VCS:
-        subversion \
-        jed \
-        # odbc drivers
-        unixodbc unixodbc-dev \
-        # Image support
-        libtiff-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libglib2.0-0 \
-        libxext6 \
-        libsm6 \
-        libxext-dev \
-        libxrender1 \
-        libzmq3-dev \
-        # protobuffer support
-        protobuf-compiler \
-        libprotobuf-dev \
-        libprotoc-dev \
-        autoconf \
-        automake \
-        libtool 
+# RUN apt-get update --fix-missing && \
+#     apt-get install -y apt-utils && \
+#     apt-get upgrade -y && \
+#     apt-get update && \
+#     apt-get install -y --no-install-recommends \  
+#         # VCS:
+#         subversion \
+#         jed \
+#         # odbc drivers
+#         unixodbc unixodbc-dev \
+#         # Image support
+#         libtiff-dev \
+#         libjpeg-dev \
+#         libpng-dev \
+#         libglib2.0-0 \
+#         libxext6 \
+#         libsm6 \
+#         libxext-dev \
+#         libxrender1 \
+#         libzmq3-dev \
+#         # protobuffer support
+#         protobuf-compiler \
+#         libprotobuf-dev \
+#         libprotoc-dev \
+#         autoconf \
+#         automake \
+#         libtool 
 RUN apt-get update --fix-missing && \
     apt-get install -y apt-utils && \
     apt-get upgrade -y && \
@@ -196,14 +196,24 @@ RUN apt-get update --fix-missing && \
     apt-get install -y --no-install-recommends \  
         cmake  \
         fonts-liberation \
-        google-perftools \
+        google-perftools 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
         # Compression Libs
         # also install rar/unrar? but both are propriatory or unar (40MB)
         zip \
         gzip \
         unzip \
         bzip2 \
-        lzop \
+        lzop 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
 	# deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
         libarchive-tools \
         zlibc \
