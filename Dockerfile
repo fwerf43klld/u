@@ -263,7 +263,7 @@ RUN \
     && apt-add-repository ppa:alexlarsson/flatpak -y \
     && apt-get update -qq 
     
-RUN && apt-get update -qq \
+RUN apt-get update -qq \
     && apt install -y -qq flatpak-builder flatpak build-essential git-core \
     cmake curl freerdp2-dev intltool libappindicator3-dev libasound2-dev \
     libavahi-ui-gtk3-dev libavcodec-dev libavresample-dev libavutil-dev \
