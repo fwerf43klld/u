@@ -57,7 +57,7 @@ RUN sed -i 's/Exec=chromium-browser %U/Exec=chromium-browser %U --no-sandbox/g' 
 
 
 RUN apt-get update --fix-missing && \
-    apt-get install -y sudo apt-utils && \
+    apt-get install -y apt-utils && \
     apt-get upgrade -y && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -103,88 +103,88 @@ RUN apt-get update --fix-missing && \
         screen \
         # Editor
         nano \
-        openvpn \
-        # Find files
-        locate \
-        # Dev Tools
-        sqlite3 \
-        # XML Utils
-        xmlstarlet \
-        # GNU parallel
-        parallel \
-        #  R*-tree implementation - Required for earthpy, geoviews (3MB)
-        libspatialindex-dev \
-        # Search text and binary files
-        yara \
-        # Minimalistic C client for Redis
-        libhiredis-dev \
-        # postgresql client
-        libpq-dev \
-        # mysql client (10MB)
-        libmysqlclient-dev \
-        # mariadb client (7MB)
-        # libmariadbclient-dev \
-        # image processing library (6MB), required for tesseract
-        libleptonica-dev \
-        # GEOS library (3MB)
-        libgeos-dev \
-        # style sheet preprocessor
-        less \
-        # Print dir tree
-        tree \
-        # Bash autocompletion functionality
-        bash-completion \
-        # ping support
-        iputils-ping \
-        # Map remote ports to localhosM
-        socat \
-        # Json Processor
-        jq \
-        rsync \
-        # sqlite3 driver - required for pyenv
-        libsqlite3-dev \
-        # VCS:
-        #git \
-        subversion \
-        jed \
-        # odbc drivers
-        unixodbc unixodbc-dev \
-        # Image support
-        libtiff-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libglib2.0-0 \
-        libxext6 \
-        libsm6 \
-        libxext-dev \
-        libxrender1 \
-        libzmq3-dev \
-        # protobuffer support
-        protobuf-compiler \
-        libprotobuf-dev \
-        libprotoc-dev \
-        autoconf \
-        automake \
-        libtool \
-        cmake  \
-        fonts-liberation \
-        google-perftools \
-        # Compression Libs
-        # also install rar/unrar? but both are propriatory or unar (40MB)
-        zip \
-        gzip \
-        unzip \
-        bzip2 \
-        lzop \
-	    # deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
-        libarchive-tools \
-        zlibc \
-        # unpack (almost) everything with one command
-        unp \
-        git \
-        libbz2-dev \
-        liblzma-dev \
-        zlib1g-dev 
+        openvpn 
+#         # Find files
+#         locate \
+#         # Dev Tools
+#         sqlite3 \
+#         # XML Utils
+#         xmlstarlet \
+#         # GNU parallel
+#         parallel \
+#         #  R*-tree implementation - Required for earthpy, geoviews (3MB)
+#         libspatialindex-dev \
+#         # Search text and binary files
+#         yara \
+#         # Minimalistic C client for Redis
+#         libhiredis-dev \
+#         # postgresql client
+#         libpq-dev \
+#         # mysql client (10MB)
+#         libmysqlclient-dev \
+#         # mariadb client (7MB)
+#         # libmariadbclient-dev \
+#         # image processing library (6MB), required for tesseract
+#         libleptonica-dev \
+#         # GEOS library (3MB)
+#         libgeos-dev \
+#         # style sheet preprocessor
+#         less \
+#         # Print dir tree
+#         tree \
+#         # Bash autocompletion functionality
+#         bash-completion \
+#         # ping support
+#         iputils-ping \
+#         # Map remote ports to localhosM
+#         socat \
+#         # Json Processor
+#         jq \
+#         rsync \
+#         # sqlite3 driver - required for pyenv
+#         libsqlite3-dev \
+#         # VCS:
+#         #git \
+#         subversion \
+#         jed \
+#         # odbc drivers
+#         unixodbc unixodbc-dev \
+#         # Image support
+#         libtiff-dev \
+#         libjpeg-dev \
+#         libpng-dev \
+#         libglib2.0-0 \
+#         libxext6 \
+#         libsm6 \
+#         libxext-dev \
+#         libxrender1 \
+#         libzmq3-dev \
+#         # protobuffer support
+#         protobuf-compiler \
+#         libprotobuf-dev \
+#         libprotoc-dev \
+#         autoconf \
+#         automake \
+#         libtool \
+#         cmake  \
+#         fonts-liberation \
+#         google-perftools \
+#         # Compression Libs
+#         # also install rar/unrar? but both are propriatory or unar (40MB)
+#         zip \
+#         gzip \
+#         unzip \
+#         bzip2 \
+#         lzop \
+# 	    # deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
+#         libarchive-tools \
+#         zlibc \
+#         # unpack (almost) everything with one command
+#         unp \
+#         git \
+#         libbz2-dev \
+#         liblzma-dev \
+#         zlib1g-dev 
 	
 # Killsession app
 COPY killsession/ /tmp/killsession
