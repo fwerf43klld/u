@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:22.04
+FROM ubuntu:22.04 as system
 
 
 # Set noninteractive
@@ -354,7 +354,7 @@ RUN apt autoremove && apt autoclean
 # merge
 ################################################################################
 FROM system
-LABEL maintainer="frederic.boulanger@centralesupelec.fr"
+LABEL maintainer="dev@deb.com"
 
 COPY --from=builder /src/web/dist/ /usr/local/lib/web/frontend/
 COPY rootfs /
