@@ -15,7 +15,7 @@ ENV LIBGL_ALWAYS_INDIRECT=1
 # Layer cleanup script
 COPY resources/scripts/clean-layer.sh  /usr/bin/clean-layer.sh
 COPY resources/scripts/fix-permissions.sh  /usr/bin/fix-permissions.sh
-
+WORKDIR /root
  # Make clean-layer and fix-permissions executable
 RUN \
     chmod a+rwx /usr/bin/clean-layer.sh && \
