@@ -15,6 +15,22 @@ ENV LIBGL_ALWAYS_INDIRECT=1
 # Layer cleanup script
 COPY resources/scripts/clean-layer.sh  /usr/bin/clean-layer.sh
 COPY resources/scripts/fix-permissions.sh  /usr/bin/fix-permissions.sh
+
+ENV \
+    SHELL="/bin/bash" \
+    HOME="/root"  \
+    # Nobteook server user: https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile#L33
+    NB_USER="root" \
+    USER_GID=0 \
+    XDG_CACHE_HOME="/root/.cache/" \
+    XDG_RUNTIME_DIR="/tmp" \
+    DISPLAY=":1" \
+    TERM="xterm" \
+    DEBIAN_FRONTEND="noninteractive" \
+    RESOURCES_PATH="/resources" \
+    SSL_RESOURCES_PATH="/resources/ssl" \
+    WORKSPACE_HOME="/workspace"
+    
 WORKDIR /root
  # Make clean-layer and fix-permissions executable
 RUN \
