@@ -3,16 +3,12 @@
 ################################################################################
 FROM ubuntu:22.04
 
-LABEL description="Bootstrap image used to build and test Remmina with Ubuntu 22.04" \
-                   maintainer="Antenore Gatta <antenore@simbiosi.org>" \
-                   vendor="Remmina Project" \
-                   name="org.remmina.Remmina.images.ubuntu-22.04"
 
 # Set noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 # # Avoid prompts for time zone
 # ENV DEBIAN_FRONTEND noninteractive
-ENV TZ=Europe/Moscow
+#ENV TZ=Europe/Moscow
 # Fix issue with libGL on Windows
 ENV LIBGL_ALWAYS_INDIRECT=1
 
