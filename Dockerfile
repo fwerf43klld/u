@@ -354,7 +354,7 @@ RUN apt autoremove && apt autoclean
 # merge
 ################################################################################
 #FROM system
-#LABEL maintainer="dev@deb.com"
+LABEL maintainer="dev@deb.com"
 
 COPY --from=builder /src/web/dist/ /usr/local/lib/web/frontend/
 COPY rootfs /
