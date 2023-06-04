@@ -17,7 +17,7 @@ RUN \
     && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
     && apt-get update -qq \
     && apt install -y -qq build-essential git-core \
-    cmake curl freerdp2-dev intltool wget \
+    cmake curl freerdp2-dev intltool remmina remmina-plugin-rdp libfreerdp-plugins-standard wget \
     && apt-get autoremove -y \
     && apt-get clean -y
     
