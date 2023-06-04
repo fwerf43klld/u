@@ -119,6 +119,8 @@ RUN apt-get update --fix-missing && \
         # Editor
         nano \
         openvpn 
+
+
        
 RUN apt-get update --fix-missing && \
     apt-get install -y apt-utils && \
@@ -271,6 +273,258 @@ RUN apt-get update --fix-missing && \
  
 # RUN snap install telegram-desktop 
 
+ENV \
+    # TODO: CONDA_DIR is deprecated and should be removed in the future
+    CONDA_DIR=/opt/conda \
+    CONDA_ROOT=/opt/conda \
+    PYTHON_VERSION="3.9.10" \
+    CONDA_PYTHON_DIR=/opt/conda/lib/python3.9 \
+    MINICONDA_VERSION=4.10.3 \
+    MINICONDA_MD5=8c69f65a4ae27fb41df0fe552b4a8a3b \
+    CONDA_VERSION=4.10.3
+
+RUN wget --no-verbose https://repo.anaconda.com/miniconda/Miniconda3-py38_${CONDA_VERSION}-Linux-x86_64.sh -O ~/miniconda.sh && \
+    echo "${MINICONDA_MD5} *miniconda.sh" | md5sum -c - && \
+    /bin/bash ~/miniconda.sh -b -p $CONDA_ROOT && \
+    export PATH=$CONDA_ROOT/bin:$PATH && \
+    rm ~/miniconda.sh && \
+    # Configure conda
+    # TODO: Add conde-forge as main channel -> remove if testted
+    # TODO, use condarc file
+    $CONDA_ROOT/bin/conda config --system --add channels conda-forge && \
+    $CONDA_ROOT/bin/conda config --system --set auto_update_conda False && \
+    $CONDA_ROOT/bin/conda config --system --set show_channel_urls True && \
+    $CONDA_ROOT/bin/conda config --system --set channel_priority strict && \
+    # Deactivate pip interoperability (currently default), otherwise conda tries to uninstall pip packages
+    $CONDA_ROOT/bin/conda config --system --set pip_interop_enabled false && \
+    # Update conda
+    $CONDA_ROOT/bin/conda update -y -n base -c defaults conda && \
+    $CONDA_ROOT/bin/conda update -y setuptools && \
+    $CONDA_ROOT/bin/conda install -y conda-build && \
+    # Update selected packages - install python 3.8.x
+    $CONDA_ROOT/bin/conda install -y --update-all python=$PYTHON_VERSION && \
+    # Link Conda
+    ln -s $CONDA_ROOT/bin/python /usr/local/bin/python && \
+    ln -s $CONDA_ROOT/bin/conda /usr/bin/conda && \
+    # Update
+    $CONDA_ROOT/bin/conda install -y pip && \
+    $CONDA_ROOT/bin/pip install --upgrade pip && \
+    chmod -R a+rwx /usr/local/bin/ && \
+    # Cleanup - Remove all here since conda is not in path as of now
+    # find /opt/conda/ -follow -type f -name '*.a' -delete && \
+    # find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    $CONDA_ROOT/bin/conda clean -y --packages && \
+    $CONDA_ROOT/bin/conda clean -y -a -f  && \
+    $CONDA_ROOT/bin/conda build purge-all && \
+    # Fix permissions
+    fix-permissions.sh $CONDA_ROOT && \
+    clean-layer.sh
+
+ENV PATH=$CONDA_ROOT/bin:$PATH
+
+# There is nothing added yet to LD_LIBRARY_PATH, so we can overwrite
+ENV LD_LIBRARY_PATH=$CONDA_ROOT/lib
+
+# Install pyenv to allow dynamic creation of python versions
+RUN git clone https://github.com/pyenv/pyenv.git $RESOURCES_PATH/.pyenv && \
+    # Install pyenv plugins based on pyenv installer
+    git clone https://github.com/pyenv/pyenv-virtualenv.git $RESOURCES_PATH/.pyenv/plugins/pyenv-virtualenv  && \
+    git clone git://github.com/pyenv/pyenv-doctor.git $RESOURCES_PATH/.pyenv/plugins/pyenv-doctor && \
+    git clone https://github.com/pyenv/pyenv-update.git $RESOURCES_PATH/.pyenv/plugins/pyenv-update && \
+    git clone https://github.com/pyenv/pyenv-which-ext.git $RESOURCES_PATH/.pyenv/plugins/pyenv-which-ext && \
+    apt-get update && \
+    # TODO: lib might contain high vulnerability
+    # Required by pyenv
+    apt-get install -y --no-install-recommends libffi-dev && \
+    clean-layer.sh
+
+# Add pyenv to path
+ENV PATH=$RESOURCES_PATH/.pyenv/shims:$RESOURCES_PATH/.pyenv/bin:$PATH \
+    PYENV_ROOT=$RESOURCES_PATH/.pyenv
+
+# Install pipx
+RUN pip install pipx && \
+    # Configure pipx
+    python -m pipx ensurepath && \
+    # Cleanup
+    clean-layer.sh
+ENV PATH=$HOME/.local/bin:$PATH
+
+RUN \
+    apt-get update && \
+    # https://nodejs.org/en/about/releases/ use even numbered releases, i.e. LTS versions
+    curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && \
+    apt-get install -y nodejs && \
+    # As conda is first in path, the commands 'node' and 'npm' reference to the version of conda.
+    # Replace those versions with the newly installed versions of node
+    rm -f /opt/conda/bin/node && ln -s /usr/bin/node /opt/conda/bin/node && \
+    rm -f /opt/conda/bin/npm && ln -s /usr/bin/npm /opt/conda/bin/npm && \
+    # Fix permissions
+    chmod a+rwx /usr/bin/node && \
+    chmod a+rwx /usr/bin/npm && \
+    # Fix node versions - put into own dir and before conda:
+    mkdir -p /opt/node/bin && \
+    ln -s /usr/bin/node /opt/node/bin/node && \
+    ln -s /usr/bin/npm /opt/node/bin/npm && \
+    # Update npm
+    /usr/bin/npm install -g npm && \
+    # Install Yarn
+    /usr/bin/npm install -g yarn && \
+    # Install typescript
+    /usr/bin/npm install -g typescript && \
+    # Install webpack - 32 MB
+    /usr/bin/npm install -g webpack && \
+    # Install node-gyp
+    /usr/bin/npm install -g node-gyp && \
+    # Update all packages to latest version
+    /usr/bin/npm update -g 
+    
+RUN \
+    # Use staging channel to get newest xfce4 version (4.16)
+    add-apt-repository -y ppa:xubuntu-dev/staging && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends xfce4 && \
+    apt-get install -y --no-install-recommends gconf2 && \
+    apt-get install -y --no-install-recommends xfce4-terminal && \
+    apt-get install -y --no-install-recommends xfce4-clipman && \
+    apt-get install -y --no-install-recommends xterm && \
+    apt-get install -y --no-install-recommends --allow-unauthenticated xfce4-taskmanager  && \
+    # Install dependencies to enable vncserver
+    apt-get install -y --no-install-recommends xauth xinit dbus-x11 && \
+    # Install gdebi deb installer
+    apt-get install -y --no-install-recommends gdebi && \
+    # Search for files
+    apt-get install -y --no-install-recommends catfish && \
+    apt-get install -y --no-install-recommends font-manager && \
+    # vs support for thunar
+    apt-get install -y thunar-vcs-plugin && \
+    # Streaming text editor for large files - klogg is alternative to glogg
+    apt-get install -y --no-install-recommends libqt5concurrent5 libqt5widgets5 libqt5xml5 && \
+    wget --no-verbose https://github.com/variar/klogg/releases/download/v20.12/klogg-20.12.0.813-Linux.deb -O $RESOURCES_PATH/klogg.deb && \
+    dpkg -i $RESOURCES_PATH/klogg.deb && \
+    rm $RESOURCES_PATH/klogg.deb && \
+    # Disk Usage Visualizer
+    apt-get install -y --no-install-recommends baobab && \
+    # Lightweight text editor
+    apt-get install -y --no-install-recommends mousepad && \
+    apt-get install -y --no-install-recommends vim && \
+    # Process monitoring
+    apt-get install -y --no-install-recommends htop && \
+    # Install Archive/Compression Tools: https://wiki.ubuntuusers.de/Archivmanager/
+    apt-get install -y p7zip p7zip-rar && \
+    apt-get install -y --no-install-recommends thunar-archive-plugin && \
+    apt-get install -y xarchiver && \
+    # DB Utils
+    apt-get install -y --no-install-recommends sqlitebrowser && \
+    # Install nautilus and support for sftp mounting
+    apt-get install -y --no-install-recommends nautilus gvfs-backends && \
+    # Install gigolo - Access remote systems
+    apt-get install -y --no-install-recommends gigolo gvfs-bin && \
+    # xfce systemload panel plugin - needs to be activated
+    # apt-get install -y --no-install-recommends xfce4-systemload-plugin && \
+    # Leightweight ftp client that supports sftp, http, ...
+    apt-get install -y --no-install-recommends gftp && \
+    # Install chrome
+    # sudo add-apt-repository ppa:system76/pop
+    add-apt-repository ppa:saiarcot895/chromium-beta && \
+    apt-get update && \
+    apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg && \
+    ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
+    # Cleanup
+    apt-get purge -y pm-utils xscreensaver* && \
+    # Large package: gnome-user-guide 50MB app-install-data 50MB
+    apt-get remove -y app-install-data gnome-user-guide && \
+    clean-layer.sh
+
+
+COPY resources/libraries ${RESOURCES_PATH}/libraries
+
+RUN \
+    # Link Conda - All python are linke to the conda instances
+    # Linking python 3 crashes conda -> cannot install anyting - remove instead
+    # ln -s -f $CONDA_ROOT/bin/python /usr/bin/python3 && \
+    # if removed -> cannot use add-apt-repository
+    # rm /usr/bin/python3 && \
+    # rm /usr/bin/python3.5
+    ln -s -f $CONDA_ROOT/bin/python /usr/bin/python && \
+    apt-get update && \
+    # upgrade pip
+    pip install --upgrade pip && \
+    # If minimal flavor - install
+
+        # Install mkl for faster computations
+        conda install -y --update-all 'python='$PYTHON_VERSION mkl-service mkl ; \
+
+    # Install some basics - required to run container
+    conda install -y --update-all \
+            'python='$PYTHON_VERSION \
+            'ipython=7.24.*' \
+            'notebook=6.4.*' \
+            'jupyterlab=3.0.*' \
+            # TODO: nbconvert 6.x makes problems with template_path
+            'nbconvert=5.6.*' \
+            # TODO: temp fix: yarl version 1.5 is required for lots of libraries.
+            'yarl==1.5.*' \
+            # TODO install scipy, numpy, sklearn, and numexpr via conda for mkl optimizaed versions: https://docs.anaconda.com/mkl-optimizations/
+            'scipy==1.7.*' \
+            'numpy==1.19.*' \
+            scikit-learn \
+            numexpr && \
+            # installed via apt-get and pip: protobuf \
+            # installed via apt-get: zlib  && \
+    # Switch of channel priority, makes some trouble
+    conda config --system --set channel_priority false && \
+    # Install minimal pip requirements
+    # OpenMPI support
+    apt-get install -y --no-install-recommends libopenmpi-dev openmpi-bin && \
+    conda install -y --freeze-installed  \
+        'python='$PYTHON_VERSION \
+        boost \
+        mkl-include && \
+    # Install mkldnn
+    conda install -y --freeze-installed -c mingfeima mkldnn && \
+    # Install pytorch - cpu only
+    conda install -y -c pytorch "pytorch==1.9.*" cpuonly && \
+    # Install light pip requirements
+    pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-light.txt && \
+    # If light light flavor - exit here
+    if [ "$WORKSPACE_FLAVOR" = "light" ]; then \
+        # Fix permissions
+        fix-permissions.sh $CONDA_ROOT && \
+        # Cleanup
+        clean-layer.sh && \
+        exit 0 ; \
+    fi && \
+    # libartals == 40MB liblapack-dev == 20 MB
+    apt-get install -y --no-install-recommends liblapack-dev libatlas-base-dev libeigen3-dev libblas-dev && \
+    # pandoc -> installs libluajit -> problem for openresty
+    # HDF5 (19MB)
+    apt-get install -y --no-install-recommends libhdf5-dev && \
+    # TBB threading optimization
+    apt-get install -y --no-install-recommends libtbb-dev && \
+    # required for tesseract: 11MB - tesseract-ocr-dev?
+    apt-get install -y --no-install-recommends libtesseract-dev && \
+    pip install --no-cache-dir tesserocr && \
+    # TODO: installs tenserflow 2.4 - Required for tensorflow graphics (9MB)
+    apt-get install -y --no-install-recommends libopenexr-dev && \
+    #pip install --no-cache-dir tensorflow-graphics==2020.5.20 && \
+    # GCC OpenMP (GOMP) support library
+    apt-get install -y --no-install-recommends libgomp1 && \
+    # Install Intel(R) Compiler Runtime - numba optimization
+    # TODO: don't install, results in memory error: conda install -y --freeze-installed -c numba icc_rt && \
+    # Install libjpeg turbo for speedup in image processing
+    conda install -y --freeze-installed libjpeg-turbo && \
+    # Add snakemake for workflow management
+    conda install -y -c bioconda -c conda-forge snakemake-minimal && \
+    # Add mamba as conda alternativ
+    conda install -y -c conda-forge mamba && \
+    # Faiss - A library for efficient similarity search and clustering of dense vectors.
+    conda install -y --freeze-installed faiss-cpu && \
+    # Install full pip requirements
+    pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed --use-deprecated=legacy-resolver -r ${RESOURCES_PATH}/libraries/requirements-full.txt && \
+    # Setup Spacy
+    # Spacy - download and large language removal
+    python -m spacy download en ru
 	
 # Killsession app
 COPY killsession/ /tmp/killsession
