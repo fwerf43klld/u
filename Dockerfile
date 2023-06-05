@@ -441,24 +441,24 @@ RUN \
     apt-get install -y xarchiver && \
     # DB Utils
     apt-get install -y --no-install-recommends sqlitebrowser && \
-    # Install nautilus and support for sftp mounting
-    apt-get install -y --no-install-recommends nautilus gvfs-backends && \
-    # Install gigolo - Access remote systems
-    apt-get install -y --no-install-recommends gigolo gvfs-bin && \
-    # xfce systemload panel plugin - needs to be activated
-    # apt-get install -y --no-install-recommends xfce4-systemload-plugin && \
-    # Leightweight ftp client that supports sftp, http, ...
-    apt-get install -y --no-install-recommends gftp && \
-    # Install chrome
-    # sudo add-apt-repository ppa:system76/pop
-    add-apt-repository ppa:saiarcot895/chromium-beta && \
-    apt-get update && \
-    apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg && \
-    ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
-    # Cleanup
-    apt-get purge -y pm-utils xscreensaver* && \
-    # Large package: gnome-user-guide 50MB app-install-data 50MB
-    apt-get remove -y app-install-data gnome-user-guide && \
+#     # Install nautilus and support for sftp mounting
+#     apt-get install -y --no-install-recommends nautilus gvfs-backends && \
+#     # Install gigolo - Access remote systems
+#     apt-get install -y --no-install-recommends gigolo gvfs-bin && \
+#     # xfce systemload panel plugin - needs to be activated
+#     # apt-get install -y --no-install-recommends xfce4-systemload-plugin && \
+#     # Leightweight ftp client that supports sftp, http, ...
+#     apt-get install -y --no-install-recommends gftp && \
+#     # Install chrome
+#     # sudo add-apt-repository ppa:system76/pop
+#     add-apt-repository ppa:saiarcot895/chromium-beta && \
+#     apt-get update && \
+#     apt-get install -y chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg && \
+#     ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
+#     # Cleanup
+#     apt-get purge -y pm-utils xscreensaver* && \
+#     # Large package: gnome-user-guide 50MB app-install-data 50MB
+#     apt-get remove -y app-install-data gnome-user-guide && \
     clean-layer.sh
 
 
