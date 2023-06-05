@@ -482,9 +482,8 @@ RUN \
 #         conda install -y --update-all 'python='$PYTHON_VERSION nomkl ; \
 #     else \
         # Install mkl for faster computations
-        conda install -y --update-all 'python='$PYTHON_VERSION mkl-service mkl ; \
-#     fi 
-    # Install some basics - required to run container
+        conda install -y --update-all 'python='$PYTHON_VERSION mkl-service mkl ; 
+
 RUN conda install -y --update-all \
             'python='$PYTHON_VERSION \
             'ipython=8.0.*' \
