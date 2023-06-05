@@ -464,6 +464,7 @@ RUN \
 
 COPY resources/libraries ${RESOURCES_PATH}/libraries
 
+### Install main data science libs
 RUN \
     # Link Conda - All python are linke to the conda instances
     # Linking python 3 crashes conda -> cannot install anyting - remove instead
@@ -476,16 +477,19 @@ RUN \
     # upgrade pip
     pip install --upgrade pip && \
     # If minimal flavor - install
-
+#     if [ "$WORKSPACE_FLAVOR" = "minimal" ]; then \
+#         # Install nomkl - mkl needs lots of space
+#         conda install -y --update-all 'python='$PYTHON_VERSION nomkl ; \
+#     else \
         # Install mkl for faster computations
         conda install -y --update-all 'python='$PYTHON_VERSION mkl-service mkl ; \
-
+#     fi 
     # Install some basics - required to run container
-    conda install -y --update-all \
+RUN conda install -y --update-all \
             'python='$PYTHON_VERSION \
-            'ipython=7.24.*' \
+            'ipython=8.0.*' \
             'notebook=6.4.*' \
-            'jupyterlab=3.0.*' \
+            'jupyterlab=3.2.*' \
             # TODO: nbconvert 6.x makes problems with template_path
             'nbconvert=5.6.*' \
             # TODO: temp fix: yarl version 1.5 is required for lots of libraries.
@@ -500,26 +504,38 @@ RUN \
     # Switch of channel priority, makes some trouble
     conda config --system --set channel_priority false && \
     # Install minimal pip requirements
+#     pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-minimal.txt && \
+    # If minimal flavor - exit here
+#     if [ "$WORKSPACE_FLAVOR" = "minimal" ]; then \
+#         # Remove pandoc - package for markdown conversion - not needed
+#         # TODO: conda remove -y --force pandoc && \
+#         # Fix permissions
+#         fix-permissions.sh $CONDA_ROOT && \
+#         # Cleanup
+#         clean-layer.sh && \
+#         exit 0 ; \
+#     fi 
     # OpenMPI support
-    apt-get install -y --no-install-recommends libopenmpi-dev openmpi-bin && \
+RUN    apt-get install -y libopenmpi-dev openmpi-bin && \
     conda install -y --freeze-installed  \
         'python='$PYTHON_VERSION \
         boost \
         mkl-include && \
+    # Fix permissions
+    fix-permissions.sh $CONDA_ROOT && \
+    # Cleanup
+    clean-layer.sh
     # Install mkldnn
-    conda install -y --freeze-installed -c mingfeima mkldnn && \
-    # Install pytorch - cpu only
-    conda install -y -c pytorch "pytorch==1.9.*" cpuonly && \
+#RUN conda install -y -c mingfeima mkldnn && \
+#    # Install pytorch - cpu only
+#    # Fix permissions
+#    fix-permissions.sh $CONDA_ROOT && \
+#    # Cleanup
+#    clean-layer.sh
+    
+RUN conda install -y -c pytorch "pytorch==1.10.*" cpuonly && \
     # Install light pip requirements
-    pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-light.txt && \
-    # If light light flavor - exit here
-    if [ "$WORKSPACE_FLAVOR" = "light" ]; then \
-        # Fix permissions
-        fix-permissions.sh $CONDA_ROOT && \
-        # Cleanup
-        clean-layer.sh && \
-        exit 0 ; \
-    fi && \
+    #pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-light.txt && \
     # libartals == 40MB liblapack-dev == 20 MB
     apt-get install -y --no-install-recommends liblapack-dev libatlas-base-dev libeigen3-dev libblas-dev && \
     # pandoc -> installs libluajit -> problem for openresty
@@ -538,7 +554,12 @@ RUN \
     # Install Intel(R) Compiler Runtime - numba optimization
     # TODO: don't install, results in memory error: conda install -y --freeze-installed -c numba icc_rt && \
     # Install libjpeg turbo for speedup in image processing
-    conda install -y --freeze-installed libjpeg-turbo && \
+    # Fix permissions
+    fix-permissions.sh $CONDA_ROOT && \
+    # Cleanup
+    clean-layer.sh
+    
+RUN    conda install -y --freeze-installed libjpeg-turbo && \
     # Add snakemake for workflow management
     conda install -y -c bioconda -c conda-forge snakemake-minimal && \
     # Add mamba as conda alternativ
@@ -549,8 +570,20 @@ RUN \
     pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed --use-deprecated=legacy-resolver -r ${RESOURCES_PATH}/libraries/requirements-full.txt && \
     # Setup Spacy
     # Spacy - download and large language removal
+    #python -m spacy download en && \
     python -m spacy.en.download all  && \
-    python -m spacy.ru.download all 
+    python -m spacy.ru.download all && \
+    # Fix permissions
+    fix-permissions.sh $CONDA_ROOT && \
+    # Cleanup
+    clean-layer.sh
+
+# Fix conda version
+RUN \
+    # Conda installs wrong node version - relink conda node to the actual node
+    rm -f /opt/conda/bin/node && ln -s /usr/bin/node /opt/conda/bin/node && \
+    rm -f /opt/conda/bin/npm && ln -s /usr/bin/npm /opt/conda/bin/npm
+
 	
 # Killsession app
 COPY killsession/ /tmp/killsession
