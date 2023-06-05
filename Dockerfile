@@ -545,7 +545,7 @@ RUN conda install -y -c pytorch "pytorch==1.10.*" cpuonly && \
     #apt-get install -y --no-install-recommends libtbb-dev && \
     # required for tesseract: 11MB - tesseract-ocr-dev?
     #apt-get install -y --no-install-recommends libtesseract-dev && \
-    pip install --no-cache-dir tesserocr && \
+    #pip install --no-cache-dir tesserocr && \
     # TODO: installs tenserflow 2.4 - Required for tensorflow graphics (9MB)
     #apt-get install -y --no-install-recommends libopenexr-dev && \
     #pip install --no-cache-dir tensorflow-graphics==2020.5.20 && \
