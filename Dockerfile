@@ -502,7 +502,8 @@ RUN conda install -y --update-all \
             # installed via apt-get and pip: protobuf \
             # installed via apt-get: zlib  && \
     # Switch of channel priority, makes some trouble
-    conda config --system --set channel_priority false && \
+    conda config --system --set channel_priority false 
+    # && \
     # Install minimal pip requirements
 #     pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-minimal.txt && \
     # If minimal flavor - exit here
