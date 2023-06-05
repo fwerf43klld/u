@@ -537,20 +537,20 @@ RUN conda install -y -c pytorch "pytorch==1.10.*" cpuonly && \
     # Install light pip requirements
     #pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-light.txt && \
     # libartals == 40MB liblapack-dev == 20 MB
-    apt-get install -y --no-install-recommends liblapack-dev libatlas-base-dev libeigen3-dev libblas-dev && \
+    #apt-get install -y --no-install-recommends liblapack-dev libatlas-base-dev libeigen3-dev libblas-dev && \
     # pandoc -> installs libluajit -> problem for openresty
     # HDF5 (19MB)
-    apt-get install -y --no-install-recommends libhdf5-dev && \
+    #apt-get install -y --no-install-recommends libhdf5-dev && \
     # TBB threading optimization
-    apt-get install -y --no-install-recommends libtbb-dev && \
+    #apt-get install -y --no-install-recommends libtbb-dev && \
     # required for tesseract: 11MB - tesseract-ocr-dev?
-    apt-get install -y --no-install-recommends libtesseract-dev && \
+    #apt-get install -y --no-install-recommends libtesseract-dev && \
     pip install --no-cache-dir tesserocr && \
     # TODO: installs tenserflow 2.4 - Required for tensorflow graphics (9MB)
-    apt-get install -y --no-install-recommends libopenexr-dev && \
+    #apt-get install -y --no-install-recommends libopenexr-dev && \
     #pip install --no-cache-dir tensorflow-graphics==2020.5.20 && \
     # GCC OpenMP (GOMP) support library
-    apt-get install -y --no-install-recommends libgomp1 && \
+    #apt-get install -y --no-install-recommends libgomp1 && \
     # Install Intel(R) Compiler Runtime - numba optimization
     # TODO: don't install, results in memory error: conda install -y --freeze-installed -c numba icc_rt && \
     # Install libjpeg turbo for speedup in image processing
