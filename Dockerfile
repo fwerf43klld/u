@@ -572,9 +572,9 @@ RUN    conda install -y --freeze-installed libjpeg-turbo && \
     # Spacy - download and large language removal
     #python -m spacy download en && \
     #python -m pip setuptools wheel  && \
-    python -m spacy  && \
-    python -m spacy.en.download all  && \
-    python -m spacy.ru.download all && \
+    conda install -y -c conda-forge spacy  && \
+    python -m spacy en  && \
+    python -m spacy ru && \
     # Fix permissions
     fix-permissions.sh $CONDA_ROOT && \
     # Cleanup
