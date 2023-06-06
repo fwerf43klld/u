@@ -586,8 +586,7 @@ RUN conda config --add channels defaults && conda config --add channels conda-fo
     #python -m spacy download en && \
     #python -m pip setuptools wheel  && \
     conda install -y -c conda-forge spacy  && \
-    python -m spacy en  && \
-    #python -m spacy ru && \
+    python -m spacy download en ru && \
     # Fix permissions
     fix-permissions.sh $CONDA_ROOT && \
     # Cleanup
