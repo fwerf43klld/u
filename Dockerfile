@@ -308,6 +308,16 @@ ENV \
     MINICONDA_MD5=8c69f65a4ae27fb41df0fe552b4a8a3b \
     CONDA_VERSION=4.10.3
 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+    # style sheet preprocessor
+        wget \
+	curl \
+	git
+
 RUN wget --no-verbose https://repo.anaconda.com/miniconda/Miniconda3-py39_${CONDA_VERSION}-Linux-x86_64.sh -O ~/miniconda.sh && \
     echo "${MINICONDA_MD5} *miniconda.sh" | md5sum -c - && \
     /bin/bash ~/miniconda.sh -b -p $CONDA_ROOT && \
