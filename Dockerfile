@@ -319,7 +319,7 @@ RUN apt-get update --fix-missing && \
 	git && \
     apt-get update && \
  apt-get install apt-transport-https ca-certificates -y && \
- update-ca-certificates
+ update-ca-certificates  supervisor nginx sudo net-tools zenity
 
 RUN wget --no-verbose --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-py39_${CONDA_VERSION}-Linux-x86_64.sh -O ~/miniconda.sh && \
     echo "${MINICONDA_MD5} *miniconda.sh" | md5sum -c - && \
@@ -438,7 +438,7 @@ RUN \
     apt-get install -y thunar-vcs-plugin && \
     # Streaming text editor for large files - klogg is alternative to glogg
     apt-get install -y --no-install-recommends libqt5concurrent5 libqt5widgets5 libqt5xml5 && \
-    wget --no-verbose https://github.com/variar/klogg/releases/download/v20.12/klogg-20.12.0.813-Linux.deb -O $RESOURCES_PATH/klogg.deb && \
+    wget --no-verbose https://github.com/variar/klogg/releases/download/continuous-linux/klogg-23.06.0.1405-jammy.deb -O $RESOURCES_PATH/klogg.deb && \
     dpkg -i $RESOURCES_PATH/klogg.deb && \
     rm $RESOURCES_PATH/klogg.deb && \
     # Disk Usage Visualizer
