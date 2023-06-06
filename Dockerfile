@@ -572,12 +572,11 @@ RUN conda install -y -c pytorch "pytorch==1.10.*" cpuonly && \
     # Cleanup
     clean-layer.sh
     
-RUN conda install -c conda-forge libjpeg-turbo && \
+RUN conda config --add channels defaults && conda config --add channels conda-forge && conda config --add channels bioconda && conda install -c conda-forge libjpeg-turbo && \
     # Add snakemake for workflow management     
-    conda install -y -c conda-forge bioconda && \
-    conda install -y -c conda-forge snakemake-minimal && \
+    conda install -c bioconda snakemake-minimal && \
     # Add mamba as conda alternativ
-    conda install -y -c conda-forge mamba && \
+   conda install -c conda-forge mamba && \
     # Faiss - A library for efficient similarity search and clustering of dense vectors.
     conda install -c conda-forge faiss-cpu && \
     # Install full pip requirements
@@ -588,7 +587,7 @@ RUN conda install -c conda-forge libjpeg-turbo && \
     #python -m pip setuptools wheel  && \
     conda install -y -c conda-forge spacy  && \
     python -m spacy en  && \
-    python -m spacy ru && \
+    #python -m spacy ru && \
     # Fix permissions
     fix-permissions.sh $CONDA_ROOT && \
     # Cleanup
