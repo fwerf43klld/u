@@ -581,10 +581,10 @@ RUN    conda install -y --freeze-installed libjpeg-turbo && \
     clean-layer.sh
 
 # Fix conda version
-RUN \
-    # Conda installs wrong node version - relink conda node to the actual node
-    rm -f /opt/conda/bin/node && ln -s /usr/bin/node /opt/conda/bin/node && \
-    rm -f /opt/conda/bin/npm && ln -s /usr/bin/npm /opt/conda/bin/npm
+# RUN \
+#     # Conda installs wrong node version - relink conda node to the actual node
+#     rm -f /opt/conda/bin/node && ln -s /usr/bin/node /opt/conda/bin/node && \
+#     rm -f /opt/conda/bin/npm && ln -s /usr/bin/npm /opt/conda/bin/npm
 
 	
 # Killsession app
