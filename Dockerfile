@@ -316,7 +316,10 @@ RUN apt-get update --fix-missing && \
     # style sheet preprocessor
         wget \
 	curl \
-	git
+	git && \
+    apt-get update && \
+ apt-get install apt-transport-https ca-certificates -y && \
+ update-ca-certificates
 
 RUN wget --no-verbose --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-py39_${CONDA_VERSION}-Linux-x86_64.sh -O ~/miniconda.sh && \
     echo "${MINICONDA_MD5} *miniconda.sh" | md5sum -c - && \
