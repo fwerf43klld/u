@@ -37,264 +37,264 @@ RUN \
     chmod a+rwx /usr/bin/clean-layer.sh && \
     chmod a+rwx /usr/bin/fix-permissions.sh
     
-# RUN apt-get update -qq \
-#     && apt-get install -y -qq software-properties-common python3-software-properties \
-#     && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
-#     && apt-get update -qq \
-#     && apt install -y -qq build-essential git-core \
-#     cmake curl freerdp2-dev intltool remmina remmina-plugin-rdp wget \
-#     && apt-get autoremove -y \
-#     && apt-get clean -y
+RUN apt-get update -qq \
+    && apt-get install -y -qq software-properties-common python3-software-properties \
+    && apt-add-repository ppa:remmina-ppa-team/remmina-next-daily -y \
+    && apt-get update -qq \
+    && apt install -y -qq build-essential git-core \
+    cmake curl freerdp2-dev intltool remmina remmina-plugin-rdp wget \
+    && apt-get autoremove -y \
+    && apt-get clean -y
     
-# # FROM ubuntu:22.04 as system
+# FROM ubuntu:22.04 as system
 
 
 
-# # built-in packages
-# RUN apt-get update && apt-get upgrade -y && apt-get install apt-utils -y \
-#     && apt-get install -y software-properties-common curl apache2-utils \
-#     && apt-get update \
-#     && apt-get install -y \
-#         supervisor nginx sudo net-tools zenity \
-#         dbus-x11 x11-utils alsa-utils \
-#         mesa-utils wget
+# built-in packages
+RUN apt-get update && apt-get upgrade -y && apt-get install apt-utils -y \
+    && apt-get install -y software-properties-common curl apache2-utils \
+    && apt-get update \
+    && apt-get install -y \
+        supervisor nginx sudo net-tools zenity \
+        dbus-x11 x11-utils alsa-utils \
+        mesa-utils wget
 
-# # install debs error if combine together
-# RUN apt-get update \
-#     && apt-get install -y \
-#         xvfb x11vnc \
-#         vim-tiny ttf-wqy-zenhei
+# install debs error if combine together
+RUN apt-get update \
+    && apt-get install -y \
+        xvfb x11vnc \
+        vim-tiny ttf-wqy-zenhei
 
-# RUN apt-get update \
-#     && apt-get install -y \
-#         lxde gtk2-engines-murrine gnome-themes-standard arc-theme
-
-
-# RUN apt-get update && apt-get install -y python3 python3-tk gcc make cmake
-
-# # tini to fix subreap
-# ARG TINI_VERSION=v0.19.0
-# RUN wget https://github.com/krallin/tini/archive/v0.19.0.tar.gz \
-#  && tar zxf v0.19.0.tar.gz \
-#  && export CFLAGS="-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37"; \
-#     cd tini-0.19.0; cmake . && make && make install \
-#  && cd ..; rm -r tini-0.19.0 v0.19.0.tar.gz
+RUN apt-get update \
+    && apt-get install -y \
+        lxde gtk2-engines-murrine gnome-themes-standard arc-theme
 
 
-# # NextCloud
-# RUN apt-get update && apt-get install -y nextcloud-desktop
+RUN apt-get update && apt-get install -y python3 python3-tk gcc make cmake
 
-# # Firefox with apt, not snap (which does not run in the container)
-# COPY mozilla-firefox_aptprefs.txt /etc/apt/preferences.d/mozilla-firefox
-# RUN add-apt-repository -y ppa:mozillateam/ppa
-# RUN apt-get update && apt-get install -y --allow-downgrades firefox fonts-lyx
-
-# # Chromium beta with apt, not snap (which does not run in the container)
-# COPY chromium_aptprefs.txt /etc/apt/preferences.d/chromium
-# RUN sudo add-apt-repository -y ppa:saiarcot895/chromium-beta
-# RUN  apt-get update && apt-get install -y --allow-downgrades chromium-browser
-# RUN sed -i 's/Exec=chromium-browser %U/Exec=chromium-browser %U --no-sandbox/g' /usr/share/applications/chromium-browser.desktop
+# tini to fix subreap
+ARG TINI_VERSION=v0.19.0
+RUN wget https://github.com/krallin/tini/archive/v0.19.0.tar.gz \
+ && tar zxf v0.19.0.tar.gz \
+ && export CFLAGS="-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37"; \
+    cd tini-0.19.0; cmake . && make && make install \
+ && cd ..; rm -r tini-0.19.0 v0.19.0.tar.gz
 
 
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \
-#         # This is necessary for apt to access HTTPS sources:
-#         apt-transport-https \
-#         gnupg-agent \
-#         gpg-agent \
-#         gnupg2 \
-#         ca-certificates \
-#         build-essential \
-#         pkg-config \
-#         software-properties-common \
-#         lsof \
-#         net-tools \
-#         libcurl4 \
-#         curl \
-#         wget \
-#         cron \
-#         openssl \
-#         iproute2 \
-#         psmisc \
-#         tmux \
-#         dpkg-sig \
-#         uuid-dev \
-#         csh \
-#         xclip \
-#         clinfo \
-#         time \
-#         libssl-dev \
-#         libgdbm-dev \
-#         libncurses5-dev \
-#         libncursesw5-dev \
-#         # required by pyenv
-#         libreadline-dev \
-#         libedit-dev \
-#         xz-utils \
-#         gawk \
-#         # Simplified Wrapper and Interface Generator (5.8MB) - required by lots of py-libs
-#         swig \
-#         # Graphviz (graph visualization software) (4MB)
-#         graphviz libgraphviz-dev \
-#         # Terminal multiplexer
-#         screen \
-#         # Editor
-#         nano \
-#         openvpn 
+# NextCloud
+RUN apt-get update && apt-get install -y nextcloud-desktop
+
+# Firefox with apt, not snap (which does not run in the container)
+COPY mozilla-firefox_aptprefs.txt /etc/apt/preferences.d/mozilla-firefox
+RUN add-apt-repository -y ppa:mozillateam/ppa
+RUN apt-get update && apt-get install -y --allow-downgrades firefox fonts-lyx
+
+# Chromium beta with apt, not snap (which does not run in the container)
+COPY chromium_aptprefs.txt /etc/apt/preferences.d/chromium
+RUN sudo add-apt-repository -y ppa:saiarcot895/chromium-beta
+RUN  apt-get update && apt-get install -y --allow-downgrades chromium-browser
+RUN sed -i 's/Exec=chromium-browser %U/Exec=chromium-browser %U --no-sandbox/g' /usr/share/applications/chromium-browser.desktop
+
+
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        # This is necessary for apt to access HTTPS sources:
+        apt-transport-https \
+        gnupg-agent \
+        gpg-agent \
+        gnupg2 \
+        ca-certificates \
+        build-essential \
+        pkg-config \
+        software-properties-common \
+        lsof \
+        net-tools \
+        libcurl4 \
+        curl \
+        wget \
+        cron \
+        openssl \
+        iproute2 \
+        psmisc \
+        tmux \
+        dpkg-sig \
+        uuid-dev \
+        csh \
+        xclip \
+        clinfo \
+        time \
+        libssl-dev \
+        libgdbm-dev \
+        libncurses5-dev \
+        libncursesw5-dev \
+        # required by pyenv
+        libreadline-dev \
+        libedit-dev \
+        xz-utils \
+        gawk \
+        # Simplified Wrapper and Interface Generator (5.8MB) - required by lots of py-libs
+        swig \
+        # Graphviz (graph visualization software) (4MB)
+        graphviz libgraphviz-dev \
+        # Terminal multiplexer
+        screen \
+        # Editor
+        nano \
+        openvpn 
 
 
        
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \      
-#     	 # Find files
-#     	locate \
-#         # Dev Tools
-#         sqlite3 \
-#         # XML Utils
-#         xmlstarlet 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \      
+    	 # Find files
+    	locate \
+        # Dev Tools
+        sqlite3 \
+        # XML Utils
+        xmlstarlet 
 	
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \  
-#         # GNU parallel
-#         parallel \
-#         #  R*-tree implementation - Required for earthpy, geoviews (3MB)
-#         libspatialindex-dev \
-#         # Search text and binary files
-#         yara \
-#         # Minimalistic C client for Redis
-#         libhiredis-dev \
-#         # postgresql client
-#         libpq-dev \
-#         # mysql client (10MB)
-#         libmysqlclient-dev \
-#         # mariadb client (7MB)
-#         # libmariadbclient-dev \
-#         # image processing library (6MB), required for tesseract
-#         libleptonica-dev \
-#         # GEOS library (3MB)
-#         libgeos-dev 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+        # GNU parallel
+        parallel \
+        #  R*-tree implementation - Required for earthpy, geoviews (3MB)
+        libspatialindex-dev \
+        # Search text and binary files
+        yara \
+        # Minimalistic C client for Redis
+        libhiredis-dev \
+        # postgresql client
+        libpq-dev \
+        # mysql client (10MB)
+        libmysqlclient-dev \
+        # mariadb client (7MB)
+        # libmariadbclient-dev \
+        # image processing library (6MB), required for tesseract
+        libleptonica-dev \
+        # GEOS library (3MB)
+        libgeos-dev 
         
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \  
-#     # style sheet preprocessor
-#         less \
-#         # Print dir tree
-#         tree \
-#         # Bash autocompletion functionality
-#         bash-completion \
-#         # ping support
-#         iputils-ping \
-#         # Map remote ports to localhosM
-#         socat \
-#         # Json Processor
-#         jq \
-#         rsync \
-#         # sqlite3 driver - required for pyenv
-#         libsqlite3-dev 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+    # style sheet preprocessor
+        less \
+        # Print dir tree
+        tree \
+        # Bash autocompletion functionality
+        bash-completion \
+        # ping support
+        iputils-ping \
+        # Map remote ports to localhosM
+        socat \
+        # Json Processor
+        jq \
+        rsync \
+        # sqlite3 driver - required for pyenv
+        libsqlite3-dev 
 	
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \  
-#         # VCS:
-#         subversion \
-#         jed \
-#         # odbc drivers
-#         unixodbc unixodbc-dev \
-#         # Image support
-#         libtiff-dev \
-#         libjpeg-dev \
-#         libpng-dev \
-#         libglib2.0-0 \
-#         libxext6 \
-#         libsm6 \
-#         libxext-dev \
-#         libxrender1 \
-#         libzmq3-dev \
-#         # protobuffer support
-#         protobuf-compiler \
-#         libprotobuf-dev \
-#         libprotoc-dev \
-#         autoconf \
-#         automake \
-#         libtool 
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \  
-#         cmake  \
-#         fonts-liberation \
-#         google-perftools 
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \  
-#         # Compression Libs
-#         # also install rar/unrar? but both are propriatory or unar (40MB)
-#         zip \
-#         gzip \
-#         unzip \
-#         bzip2 \
-#         lzop 
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \  
-# 	# deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
-#         libarchive-tools 
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \  
-#         zlib1g \
-# 	zlib1g-dev 
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \
-#         # unpack (almost) everything with one command
-#         unp
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \
-#         libbz2-dev \
-#         liblzma-dev \
-#         zlib1g-dev 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+        # VCS:
+        subversion \
+        jed \
+        # odbc drivers
+        unixodbc unixodbc-dev \
+        # Image support
+        libtiff-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libglib2.0-0 \
+        libxext6 \
+        libsm6 \
+        libxext-dev \
+        libxrender1 \
+        libzmq3-dev \
+        # protobuffer support
+        protobuf-compiler \
+        libprotobuf-dev \
+        libprotoc-dev \
+        autoconf \
+        automake \
+        libtool 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+        cmake  \
+        fonts-liberation \
+        google-perftools 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+        # Compression Libs
+        # also install rar/unrar? but both are propriatory or unar (40MB)
+        zip \
+        gzip \
+        unzip \
+        bzip2 \
+        lzop 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+	# deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
+        libarchive-tools 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \  
+        zlib1g \
+	zlib1g-dev 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        # unpack (almost) everything with one command
+        unp
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libbz2-dev \
+        liblzma-dev \
+        zlib1g-dev 
 	
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \   
-#     git
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \   
+    git
     
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y apt-utils && \
-#     apt-get upgrade -y && \
-#     apt-get update && \
-#     apt-get install -y --no-install-recommends \   
-#     snapd &&\
-#     ln -s /var/lib/snapd/snap /snap 
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils && \
+    apt-get upgrade -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \   
+    snapd &&\
+    ln -s /var/lib/snapd/snap /snap 
  
 # RUN snap install telegram-desktop 
 
@@ -477,100 +477,100 @@ RUN \
 
 COPY resources/libraries ${RESOURCES_PATH}/libraries
 
-# ### Install main data science libs
-# RUN \
-#     # Link Conda - All python are linke to the conda instances
-#     # Linking python 3 crashes conda -> cannot install anyting - remove instead
-#     # ln -s -f $CONDA_ROOT/bin/python /usr/bin/python3 && \
-#     # if removed -> cannot use add-apt-repository
-#     # rm /usr/bin/python3 && \
-#     # rm /usr/bin/python3.5
-#     ln -s -f $CONDA_ROOT/bin/python /usr/bin/python && \
-#     apt-get update && \
-#     # upgrade pip
-#     pip install --upgrade pip && \
-#     # If minimal flavor - install
-# #     if [ "$WORKSPACE_FLAVOR" = "minimal" ]; then \
-# #         # Install nomkl - mkl needs lots of space
-# #         conda install -y --update-all 'python='$PYTHON_VERSION nomkl ; \
-# #     else \
-#         # Install mkl for faster computations
-#         conda install -y --update-all 'python='$PYTHON_VERSION mkl-service mkl ; 
+### Install main data science libs
+RUN \
+    # Link Conda - All python are linke to the conda instances
+    # Linking python 3 crashes conda -> cannot install anyting - remove instead
+    # ln -s -f $CONDA_ROOT/bin/python /usr/bin/python3 && \
+    # if removed -> cannot use add-apt-repository
+    # rm /usr/bin/python3 && \
+    # rm /usr/bin/python3.5
+    ln -s -f $CONDA_ROOT/bin/python /usr/bin/python && \
+    apt-get update && \
+    # upgrade pip
+    pip install --upgrade pip && \
+    # If minimal flavor - install
+#     if [ "$WORKSPACE_FLAVOR" = "minimal" ]; then \
+#         # Install nomkl - mkl needs lots of space
+#         conda install -y --update-all 'python='$PYTHON_VERSION nomkl ; \
+#     else \
+        # Install mkl for faster computations
+        conda install -y --update-all 'python='$PYTHON_VERSION mkl-service mkl ; 
 
-# RUN conda install -y --update-all \
-#             'python='$PYTHON_VERSION \
-#             'ipython=8.0.*' \
-#             'notebook=6.4.*' \
-#             'jupyterlab=3.2.*' \
-#             # TODO: nbconvert 6.x makes problems with template_path
-#             'nbconvert=5.6.*' \
-#             # TODO: temp fix: yarl version 1.5 is required for lots of libraries.
-#             'yarl==1.5.*' \
-#             # TODO install scipy, numpy, sklearn, and numexpr via conda for mkl optimizaed versions: https://docs.anaconda.com/mkl-optimizations/
-#             'scipy==1.7.*' \
-#             'numpy==1.19.*' \
-#             scikit-learn \
-#             numexpr && \
-#             # installed via apt-get and pip: protobuf \
-#             # installed via apt-get: zlib  && \
-#     # Switch of channel priority, makes some trouble
-#     conda config --system --set channel_priority false 
-#     # && \
-#     # Install minimal pip requirements
-# #     pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-minimal.txt && \
-#     # If minimal flavor - exit here
-# #     if [ "$WORKSPACE_FLAVOR" = "minimal" ]; then \
-# #         # Remove pandoc - package for markdown conversion - not needed
-# #         # TODO: conda remove -y --force pandoc && \
-# #         # Fix permissions
-# #         fix-permissions.sh $CONDA_ROOT && \
-# #         # Cleanup
-# #         clean-layer.sh && \
-# #         exit 0 ; \
-# #     fi 
-#     # OpenMPI support
-# RUN    apt-get install -y libopenmpi-dev openmpi-bin && \
-#     conda install -y --freeze-installed  \
-#         'python='$PYTHON_VERSION \
-#         boost \
-#         mkl-include && \
-#     # Fix permissions
-#     fix-permissions.sh $CONDA_ROOT && \
-#     # Cleanup
-#     clean-layer.sh
-#     # Install mkldnn
-# #RUN conda install -y -c mingfeima mkldnn && \
-# #    # Install pytorch - cpu only
-# #    # Fix permissions
-# #    fix-permissions.sh $CONDA_ROOT && \
-# #    # Cleanup
-# #    clean-layer.sh
+RUN conda install -y --update-all \
+            'python='$PYTHON_VERSION \
+            'ipython=8.0.*' \
+            'notebook=6.4.*' \
+            'jupyterlab=3.2.*' \
+            # TODO: nbconvert 6.x makes problems with template_path
+            'nbconvert=5.6.*' \
+            # TODO: temp fix: yarl version 1.5 is required for lots of libraries.
+            'yarl==1.5.*' \
+            # TODO install scipy, numpy, sklearn, and numexpr via conda for mkl optimizaed versions: https://docs.anaconda.com/mkl-optimizations/
+            'scipy==1.7.*' \
+            'numpy==1.19.*' \
+            scikit-learn \
+            numexpr && \
+            # installed via apt-get and pip: protobuf \
+            # installed via apt-get: zlib  && \
+    # Switch of channel priority, makes some trouble
+    conda config --system --set channel_priority false 
+    # && \
+    # Install minimal pip requirements
+#     pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-minimal.txt && \
+    # If minimal flavor - exit here
+#     if [ "$WORKSPACE_FLAVOR" = "minimal" ]; then \
+#         # Remove pandoc - package for markdown conversion - not needed
+#         # TODO: conda remove -y --force pandoc && \
+#         # Fix permissions
+#         fix-permissions.sh $CONDA_ROOT && \
+#         # Cleanup
+#         clean-layer.sh && \
+#         exit 0 ; \
+#     fi 
+    # OpenMPI support
+RUN    apt-get install -y libopenmpi-dev openmpi-bin && \
+    conda install -y --freeze-installed  \
+        'python='$PYTHON_VERSION \
+        boost \
+        mkl-include && \
+    # Fix permissions
+    fix-permissions.sh $CONDA_ROOT && \
+    # Cleanup
+    clean-layer.sh
+    # Install mkldnn
+#RUN conda install -y -c mingfeima mkldnn && \
+#    # Install pytorch - cpu only
+#    # Fix permissions
+#    fix-permissions.sh $CONDA_ROOT && \
+#    # Cleanup
+#    clean-layer.sh
     
-# RUN conda install -y -c pytorch "pytorch==1.10.*" cpuonly && \
-#     # Install light pip requirements
-#     #pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-light.txt && \
-#     # libartals == 40MB liblapack-dev == 20 MB
-#     #apt-get install -y --no-install-recommends liblapack-dev libatlas-base-dev libeigen3-dev libblas-dev && \
-#     # pandoc -> installs libluajit -> problem for openresty
-#     # HDF5 (19MB)
-#     #apt-get install -y --no-install-recommends libhdf5-dev && \
-#     # TBB threading optimization
-#     #apt-get install -y --no-install-recommends libtbb-dev && \
-#     # required for tesseract: 11MB - tesseract-ocr-dev?
-#     #apt-get install -y --no-install-recommends libtesseract-dev && \
-#     #pip install --no-cache-dir tesserocr && \
-#     # TODO: installs tenserflow 2.4 - Required for tensorflow graphics (9MB)
-#     #apt-get install -y --no-install-recommends libopenexr-dev && \
-#     #pip install --no-cache-dir tensorflow-graphics==2020.5.20 && \
-#     # GCC OpenMP (GOMP) support library
-#     #apt-get install -y --no-install-recommends libgomp1 && \
-#     # Install Intel(R) Compiler Runtime - numba optimization
-#     # TODO: don't install, results in memory error: conda install -y --freeze-installed -c numba icc_rt && \
-#     # Install libjpeg turbo for speedup in image processing
-#     # Fix permissions
-#     fix-permissions.sh $CONDA_ROOT && \
-#     # Cleanup
-#     clean-layer.sh
+RUN conda install -y -c pytorch "pytorch==1.10.*" cpuonly && \
+    # Install light pip requirements
+    #pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed -r ${RESOURCES_PATH}/libraries/requirements-light.txt && \
+    # libartals == 40MB liblapack-dev == 20 MB
+    #apt-get install -y --no-install-recommends liblapack-dev libatlas-base-dev libeigen3-dev libblas-dev && \
+    # pandoc -> installs libluajit -> problem for openresty
+    # HDF5 (19MB)
+    #apt-get install -y --no-install-recommends libhdf5-dev && \
+    # TBB threading optimization
+    #apt-get install -y --no-install-recommends libtbb-dev && \
+    # required for tesseract: 11MB - tesseract-ocr-dev?
+    #apt-get install -y --no-install-recommends libtesseract-dev && \
+    #pip install --no-cache-dir tesserocr && \
+    # TODO: installs tenserflow 2.4 - Required for tensorflow graphics (9MB)
+    #apt-get install -y --no-install-recommends libopenexr-dev && \
+    #pip install --no-cache-dir tensorflow-graphics==2020.5.20 && \
+    # GCC OpenMP (GOMP) support library
+    #apt-get install -y --no-install-recommends libgomp1 && \
+    # Install Intel(R) Compiler Runtime - numba optimization
+    # TODO: don't install, results in memory error: conda install -y --freeze-installed -c numba icc_rt && \
+    # Install libjpeg turbo for speedup in image processing
+    # Fix permissions
+    fix-permissions.sh $CONDA_ROOT && \
+    # Cleanup
+    clean-layer.sh
     
 RUN    conda install -y -c libjpeg-turbo && \
     # Add snakemake for workflow management
@@ -594,10 +594,10 @@ RUN    conda install -y -c libjpeg-turbo && \
     clean-layer.sh
 
 # Fix conda version
-# RUN \
-#     # Conda installs wrong node version - relink conda node to the actual node
-#     rm -f /opt/conda/bin/node && ln -s /usr/bin/node /opt/conda/bin/node && \
-#     rm -f /opt/conda/bin/npm && ln -s /usr/bin/npm /opt/conda/bin/npm
+RUN \
+    # Conda installs wrong node version - relink conda node to the actual node
+    rm -f /opt/conda/bin/node && ln -s /usr/bin/node /opt/conda/bin/node && \
+    rm -f /opt/conda/bin/npm && ln -s /usr/bin/npm /opt/conda/bin/npm
 
 	
 # Killsession app
