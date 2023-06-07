@@ -369,9 +369,9 @@ RUN \
     apt-get install -y thunar-vcs-plugin && \
     # Streaming text editor for large files - klogg is alternative to glogg
     apt-get install -y --no-install-recommends libqt5concurrent5 libqt5widgets5 libqt5xml5 && \
-    wget --no-verbose https://github.com/variar/klogg/releases/download/continuous-linux/klogg-23.06.0.1405-jammy.deb -O $RESOURCES_PATH/klogg.deb && \
-    dpkg -i $RESOURCES_PATH/klogg.deb && \
-    rm $RESOURCES_PATH/klogg.deb && \
+    #wget --no-verbose https://github.com/variar/klogg/releases/download/continuous-linux/klogg-23.06.0.1405-jammy.deb -O $RESOURCES_PATH/klogg.deb && \
+    #dpkg -i $RESOURCES_PATH/klogg.deb && \
+    #rm $RESOURCES_PATH/klogg.deb && \
     # Disk Usage Visualizer
     apt-get install -y --no-install-recommends baobab && \
     # Lightweight text editor
