@@ -89,11 +89,11 @@ COPY mozilla-firefox_aptprefs.txt /etc/apt/preferences.d/mozilla-firefox
 RUN add-apt-repository -y ppa:mozillateam/ppa
 RUN apt-get update && apt-get install -y --allow-downgrades firefox fonts-lyx
 
-# Chromium beta with apt, not snap (which does not run in the container)
-COPY chromium_aptprefs.txt /etc/apt/preferences.d/chromium
-RUN sudo add-apt-repository -y ppa:saiarcot895/chromium-beta
-RUN  apt-get update && apt-get install -y --allow-downgrades chromium-browser
-RUN sed -i 's/Exec=chromium-browser %U/Exec=chromium-browser %U --no-sandbox/g' /usr/share/applications/chromium-browser.desktop
+# # Chromium beta with apt, not snap (which does not run in the container)
+# COPY chromium_aptprefs.txt /etc/apt/preferences.d/chromium
+# RUN sudo add-apt-repository -y ppa:saiarcot895/chromium-beta
+# RUN  apt-get update && apt-get install -y --allow-downgrades chromium-browser
+# RUN sed -i 's/Exec=chromium-browser %U/Exec=chromium-browser %U --no-sandbox/g' /usr/share/applications/chromium-browser.desktop
 
 
 RUN apt-get update --fix-missing && \
@@ -143,27 +143,12 @@ RUN apt-get update --fix-missing && \
         screen \
         # Editor
         nano \
-        openvpn 
-
-
-       
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \      
-    	 # Find files
+        openvpn \ 
     	locate \
         # Dev Tools
         sqlite3 \
         # XML Utils
-        xmlstarlet 
-	
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
+        xmlstarlet \
         # GNU parallel
         parallel \
         #  R*-tree implementation - Required for earthpy, geoviews (3MB)
@@ -181,13 +166,7 @@ RUN apt-get update --fix-missing && \
         # image processing library (6MB), required for tesseract
         libleptonica-dev \
         # GEOS library (3MB)
-        libgeos-dev 
-        
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
+        libgeos-dev \
     # style sheet preprocessor
         less \
         # Print dir tree
@@ -202,13 +181,7 @@ RUN apt-get update --fix-missing && \
         jq \
         rsync \
         # sqlite3 driver - required for pyenv
-        libsqlite3-dev 
-	
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
+        libsqlite3-dev \
         # VCS:
         subversion \
         jed \
@@ -230,69 +203,27 @@ RUN apt-get update --fix-missing && \
         libprotoc-dev \
         autoconf \
         automake \
-        libtool 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
+        libtool \
         cmake  \
         fonts-liberation \
-        google-perftools 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
+        google-perftools \
         # Compression Libs
         # also install rar/unrar? but both are propriatory or unar (40MB)
         zip \
         gzip \
         unzip \
         bzip2 \
-        lzop 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
+        lzop \
 	# deprecates bsdtar (https://ubuntu.pkgs.org/20.04/ubuntu-universe-i386/libarchive-tools_3.4.0-2ubuntu1_i386.deb.html)
-        libarchive-tools 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \  
+        libarchive-tools \
         zlib1g \
-	zlib1g-dev 
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+	zlib1g-dev \
         # unpack (almost) everything with one command
-        unp
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
+        unp \
         libbz2-dev \
         liblzma-dev \
-        zlib1g-dev 
-	
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \   
-    git
-    
-RUN apt-get update --fix-missing && \
-    apt-get install -y apt-utils && \
-    apt-get upgrade -y && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \   
+        zlib1g-dev \
+    git \ 
     snapd &&\
     ln -s /var/lib/snapd/snap /snap 
  
