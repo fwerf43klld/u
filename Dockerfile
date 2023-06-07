@@ -503,25 +503,25 @@ RUN conda install -y -c pytorch "pytorch==1.10.*" cpuonly && \
     # Cleanup
     clean-layer.sh
     
-RUN conda config --add channels defaults && conda config --add channels conda-forge && conda config --add channels bioconda && conda install -c conda-forge libjpeg-turbo && \
-    # Add snakemake for workflow management     
-    conda install -c bioconda snakemake-minimal && \
-    # Add mamba as conda alternativ
-   conda install -c conda-forge mamba && \
-    # Faiss - A library for efficient similarity search and clustering of dense vectors.
-    conda install -c conda-forge faiss-cpu && \
-    # Install full pip requirements
-    # pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed --use-deprecated=legacy-resolver -r ${RESOURCES_PATH}/libraries/requirements-full.txt && \
-    # Setup Spacy
-    # Spacy - download and large language removal
-    #python -m spacy download en && \
-    #python -m pip setuptools wheel  && \
-    conda install -y -c conda-forge spacy  && \
-    python -m spacy download en ru && \
-    # Fix permissions
-    fix-permissions.sh $CONDA_ROOT && \
-    # Cleanup
-    clean-layer.sh
+# RUN conda config --add channels defaults && conda config --add channels conda-forge && conda config --add channels bioconda && conda install -c conda-forge libjpeg-turbo && \
+#     # Add snakemake for workflow management     
+#     conda install -c bioconda snakemake-minimal && \
+#     # Add mamba as conda alternativ
+#    conda install -c conda-forge mamba && \
+#     # Faiss - A library for efficient similarity search and clustering of dense vectors.
+#     conda install -c conda-forge faiss-cpu && \
+#     # Install full pip requirements
+#     # pip install --no-cache-dir --upgrade --upgrade-strategy only-if-needed --use-deprecated=legacy-resolver -r ${RESOURCES_PATH}/libraries/requirements-full.txt && \
+#     # Setup Spacy
+#     # Spacy - download and large language removal
+#     #python -m spacy download en && \
+#     #python -m pip setuptools wheel  && \
+#     conda install -y -c conda-forge spacy  && \
+#     python -m spacy download en ru && \
+#     # Fix permissions
+#     fix-permissions.sh $CONDA_ROOT && \
+#     # Cleanup
+#     clean-layer.sh
 
 # Fix conda version
 RUN \
